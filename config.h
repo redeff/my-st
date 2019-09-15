@@ -84,8 +84,10 @@ unsigned int tabspaces = 8;
 
 /* Terminal colors (16 used in escape sequence) */
 static const char *palettes[][16] = {
-    {"black", "red3", "green3", "yellow3", "blue2", "magenta3", "cyan3", "gray90",
-    "gray50", "red", "green", "yellow", "#5c5cff", "magenta", "cyan", "white"},
+    #include "modsol.h"
+    #include "modcolor.h"
+    // {"black", "red3", "green3", "yellow3", "blue2", "magenta3", "cyan3", "gray90",
+    // "gray50", "red", "green", "yellow", "#5c5cff", "magenta", "cyan", "white"},
     {"#223", "#900", "#080", "#fe7", "#35e", "#fc5", "#18e", "#aaa",
     "#666", "#f25", "#0b0", "#ff6", "#46f", "#d6a", "#6bf", "#ddd"},
     {"#eaeaea", "#b7141f", "#457b24", "#fc7b08", "#134eb2", "#560088", "#0e717c", "#777777",
@@ -101,10 +103,10 @@ static const char **colorname;
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 5;
+unsigned int defaultfg = 7;
 unsigned int defaultbg = 0;
-static unsigned int defaultcs = 5;
-static unsigned int defaultrcs = 5;
+static unsigned int defaultcs = 14;
+static unsigned int defaultrcs = 15;
 
 /*
  * Default shape of cursor
@@ -119,8 +121,8 @@ static unsigned int cursorshape = 2;
  * Default columns and rows numbers
  */
 
-static unsigned int cols = 80;
-static unsigned int rows = 24;
+static unsigned int cols = 82;
+static unsigned int rows = 46;
 
 /*
  * Default colour and shape of the mouse cursor
@@ -167,8 +169,8 @@ static Shortcut shortcuts[] = {
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ TERMMOD,              XK_Return,      newterm,        {.i =  0} },
-	{ MODKEY|ShiftMask,     XK_F1,          setpalette,     {.i =  0} },
-	{ MODKEY|ShiftMask,     XK_F2,          setpalette,     {.i =  1} },
+	{ TERMMOD,              XK_F1,          setpalette,     {.i =  0} },
+	{ TERMMOD,              XK_F2,          setpalette,     {.i =  1} },
 	{ MODKEY|ShiftMask,     XK_F3,          setpalette,     {.i =  2} },
 	{ MODKEY|ShiftMask,     XK_F4,          setpalette,     {.i =  3} },
 	{ MODKEY|ShiftMask,     XK_F5,          setpalette,     {.i =  4} },
