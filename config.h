@@ -5,7 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+// static char *font = "FiraCode:size=10:antialias=true:autohint=true";
+static char *font = "Ubuntu Mono:size=12:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -16,7 +17,8 @@ static int borderpx = 2;
  * 4: value of shell in /etc/passwd
  * 5: value of shell in config.h
  */
-static char *shell = "/bin/sh";
+// static char *shell = "/usr/bin/zsh -c tmux";
+static char *shell = "/usr/bin/bash";
 char *utmp = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
@@ -63,7 +65,10 @@ static unsigned int cursorthickness = 2;
 static int bellvolume = 0;
 
 /* default TERM value */
-char *termname = "st-256color";
+char *termname = "xterm-256color";
+char *wmname = "Suckless";
+char *wmclass = "Suckless";
+char *icon_name = "utilities-terminal";
 
 /*
  * spaces per tab
@@ -82,14 +87,18 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
+float alpha = 0.8;           //< alpha value used when the window is focused.
+float alphaUnfocussed = 0.6; //< alpha value used when the focus is lost
+
 /* Terminal colors (16 used in escape sequence) */
 static const char *palettes[][16] = {
-    #include "modsol.h"
     #include "modcolor.h"
+    #include "blacksol.h"
+    #include "modsol.h"
     // {"black", "red3", "green3", "yellow3", "blue2", "magenta3", "cyan3", "gray90",
     // "gray50", "red", "green", "yellow", "#5c5cff", "magenta", "cyan", "white"},
-    {"#223", "#900", "#080", "#fe7", "#35e", "#fc5", "#18e", "#aaa",
-    "#666", "#f25", "#0b0", "#ff6", "#46f", "#d6a", "#6bf", "#ddd"},
+    // {"#223", "#900", "#080", "#fe7", "#35e", "#fc5", "#18e", "#aaa",
+    // "#666", "#f25", "#0b0", "#ff6", "#46f", "#d6a", "#6bf", "#ddd"},
     {"#eaeaea", "#b7141f", "#457b24", "#fc7b08", "#134eb2", "#560088", "#0e717c", "#777777",
     "#424242", "#e83b3f", "#7aba3a", "#fd8e09", "#54a4f3", "#aa4dbc", "#26bbd1", "#aaaaaa"},
     {"#20242d", "#b04b57", "#87b379", "#e5c179", "#7d8fa4", "#a47996", "#85a7a5", "#b3b8c3",
@@ -103,10 +112,13 @@ static const char **colorname;
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 7;
+unsigned int defaultfg = 15;
 unsigned int defaultbg = 0;
-static unsigned int defaultcs = 14;
+/* unsigned int defaultbg = 258; */
+static unsigned int defaultcs = 8;
 static unsigned int defaultrcs = 15;
+/* static unsigned int defaultcs = 256; */
+/* static unsigned int defaultrcs = 257; */
 
 /*
  * Default shape of cursor
@@ -121,8 +133,8 @@ static unsigned int cursorshape = 2;
  * Default columns and rows numbers
  */
 
-static unsigned int cols = 82;
-static unsigned int rows = 46;
+static unsigned int cols = 85;
+static unsigned int rows = 30;
 
 /*
  * Default colour and shape of the mouse cursor
@@ -171,7 +183,7 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Return,      newterm,        {.i =  0} },
 	{ TERMMOD,              XK_F1,          setpalette,     {.i =  0} },
 	{ TERMMOD,              XK_F2,          setpalette,     {.i =  1} },
-	{ MODKEY|ShiftMask,     XK_F3,          setpalette,     {.i =  2} },
+	{ TERMMOD,              XK_F3,          setpalette,     {.i =  2} },
 	{ MODKEY|ShiftMask,     XK_F4,          setpalette,     {.i =  3} },
 	{ MODKEY|ShiftMask,     XK_F5,          setpalette,     {.i =  4} },
 	{ MODKEY|ShiftMask,     XK_F6,          setpalette,     {.i =  5} },

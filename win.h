@@ -1,5 +1,4 @@
 /* See LICENSE for license details. */
-
 enum win_mode {
 	MODE_VISIBLE     = 1 << 0,
 	MODE_FOCUSED     = 1 << 1,
@@ -27,6 +26,7 @@ void xbell(void);
 void xclipcopy(void);
 void xdrawcursor(int, int, Glyph, int, int, Glyph);
 void xdrawline(Line, int, int, int);
+void xseticon(void);
 void xfinishdraw(void);
 void xloadcols(void);
 int xsetcolorname(int, const char *);
@@ -37,3 +37,4 @@ void xsetpointermotion(int);
 void xsetsel(char *);
 int xstartdraw(void);
 void xximspot(int, int);
+

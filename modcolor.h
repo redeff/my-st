@@ -1,6 +1,7 @@
 {
 	/* 8 normal colors */
-	"white",
+	// "white",
+	"#fefefe",
 	// "white",
 	"#dd0033",
 	"#117700",

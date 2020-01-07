@@ -15,6 +15,8 @@
 #include <X11/Xft/Xft.h>
 #include <X11/XKBlib.h>
 
+#include "icon.h"
+
 static char *argv0;
 #include "arg.h"
 #include "st.h"
@@ -181,6 +183,7 @@ static int match(uint, uint);
 static void run(void);
 static void usage(void);
 
+
 static void (*handler[LASTEvent])(XEvent *) = {
 	[KeyPress] = kpress,
 	[ClientMessage] = cmessage,
@@ -245,6 +248,14 @@ static char *opt_name  = NULL;
 static char *opt_title = NULL;
 
 static int oldbutton = 3; /* button event on startup: 3 = release */
+
+void
+xseticon() {
+	Atom net_wm_icon = XInternAtom(xw.dpy, "_NET_WM_ICON", 0);
+	Atom cardinal = XInternAtom(xw.dpy, "CARDINAL", 0);
+	unsigned int length = LEN(icon_data);
+	XChangeProperty(xw.dpy, xw.win, net_wm_icon, cardinal, 32, PropModeReplace, (const unsigned char*)icon_data, length);
+}
 
 void
 clipcopy(const Arg *dummy)
@@ -774,8 +785,8 @@ xclear(int x1, int y1, int x2, int y2)
 void
 xhints(void)
 {
-	XClassHint class = {opt_name ? opt_name : termname,
-	                    opt_class ? opt_class : termname};
+	XClassHint class = {opt_name ? opt_name : wmname,
+	                    opt_class ? opt_class : wmclass};
 	XWMHints wm = {.flags = InputHint, .input = 1};
 	XSizeHints *sizeh;
 
@@ -801,7 +812,6 @@ xhints(void)
 		sizeh->y = xw.t;
 		sizeh->win_gravity = xgeommasktogravity(xw.gm);
 	}
-
 	XSetWMProperties(xw.dpy, xw.win, NULL, NULL, NULL, 0, sizeh, &wm,
 			&class);
 	XFree(sizeh);
@@ -1122,6 +1132,7 @@ xinit(int cols, int rows)
 	resettitle();
 	XMapWindow(xw.dpy, xw.win);
 	xhints();
+	xseticon();
 	XSync(xw.dpy, False);
 
 	clock_gettime(CLOCK_MONOTONIC, &xsel.tclick1);
@@ -1647,18 +1658,22 @@ focus(XEvent *ev)
 	if (e->mode == NotifyGrab)
 		return;
 
+	Arg arg;
 	if (ev->type == FocusIn) {
+		arg.i = 0;
 		XSetICFocus(xw.xic);
 		win.mode |= MODE_FOCUSED;
 		xseturgency(0);
 		if (IS_SET(MODE_FOCUS))
 			ttywrite("\033[I", 3, 0);
 	} else {
+		arg.i = 1;
 		XUnsetICFocus(xw.xic);
 		win.mode &= ~MODE_FOCUSED;
 		if (IS_SET(MODE_FOCUS))
 			ttywrite("\033[O", 3, 0);
 	}
+	setpalette(&arg);
 }
 
 int
